@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let userScore = 0;
+        let compScore = 0;
+        function getScoreFromStorage() {
+            const userScore_from_storage = localStorage.getItem("userScore");
+            const compScore_from_storage = localStorage.getItem("compScore");
+            if (userScore_from_storage != null && compScore_from_storage != null) {
+                userScore = parseInt(userScore_from_storage);
+                compScore = parseInt(compScore_from_storage);
+                UpdateDisplay();
+            }
+        }
+        function UpdateLocalStorage() {
+            localStorage.setItem("userScore", userScore);
+            localStorage.setItem("compScore", compScore);
+        }
+        function UpdateDisplay() {
+            $("#myscore").html("<h6>" + "Current Score" + "</h6>");
+            $("#myscore").append("Your Score :" + userScore);
+            $("#myscore").append("<br>Computer Score :" + compScore);
+            if (userScore > compScore) {
+                $("#myscore").append("<br><h6 style='color:tomato'>You are in Lead"+"</h6");
+            }
+            else if (userScore < compScore) {
+                $("#myscore").append("<br><h6 style='color:tomato'>Computer is in Lead"+"</h6");
+            }
+            else {
+                $("#myscore").append("<br><h6 style='color:tomato'>Draw!"+"</h6");
+            }
+
+        }
+        function calculate(user, comp) {
+            if (user == comp) {
+                return "It's a tie!";
+            }
+            else if ((user == "Rock" && comp == "Scissors") ||
+                (user == "Paper" && comp == "Rock") ||
+                (user == "Scissors" && comp == "Paper")) {
+                return "YOU WON";
+            } else {
+                return "COMPUTER WON";
+            }
+
+        }
+        $(document).ready(function () {
+            $(".btn-reset").on("click", function () {
+                userScore = 0;
+                compScore = 0;
+                UpdateLocalStorage();
+                UpdateDisplay();
+                $("#myresult").empty();
+                $("#myresult").html("<h6 >Current Status</h6>");
+
+
+            });
+        });
+
+        $(document).ready(function () {
+            getScoreFromStorage();
+            $(".btn1").on("click", function () {
+                var userchoice = $(this).attr("id");
+                const compchoice = CompChoices();
+                const Result = calculate(userchoice, compchoice);
+                Update_Score(Result);
+                $("#myresult").html("<h6>" + "Current Status" + "</h6>");
+                $("#myresult").append("You chose: " + userchoice);
+                $("#myresult").append("<br>Computer chose : " + compchoice);
+                $("#myresult").append("<br> <h6 style='color:tomato'>" + Result+"</h6>");
+
+                UpdateDisplay();
+                UpdateLocalStorage();
+            });
+
+
+        });
+        function Update_Score(Result) {
+            if (Result == "YOU WON") {
+                userScore++;
+            }
+            else if (Result == "COMPUTER WON") {
+                compScore++;
+            }
+        }
+        function CompChoices() {
+            const ch = ["Rock", "Paper", "Scissors"];
+            return ch[Math.floor(Math.random() * 3)];
+        }
+
+    </script>
+    <style>
+        body {
+         
+            background: #dfe6f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            /* border: 2px solid transparent; */
+            box-shadow: 0 0 16px #adebff78;
+            border-radius: 12px;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            margin: 2.3rem auto;
+            width: 45%;
+            flex-direction: column;
+            /* background-color: rgb(245 248 255); */
+            background: linear-gradient(-45deg,#c4d2ef,#dfe6f6);
+            box-shadow: -1rem -1rem 2rem -0.5rem #f9fbfd, 1rem 1rem 2rem #a9bee8;
+        }
+
+        .score {
+            display: flex;
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        .choices {
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+
+        }
+
+        .btn1:hover {
+            background-color: #4888fa !important;
+            /* border: 1px solid !important; */
+            box-shadow:0px 0px 5px 2px rgb(132 182 241);
+
+        }
+
+        .btn1 {
+            margin: .2rem 1rem !important;
+          
+        }
+
+        h1 {
+            background-color: #e0f2f1;
+            margin: 0.41rem auto;
+            margin-top: 1rem;
+            font-size: 3rem!important;
+            width: 80%;
+            border-radius: 14px;
+            /* box-shadow: 0 0 3px #E0E0E0; */
+            box-shadow: -1rem -1rem 2rem -1.3rem #f0fff3, 0.3rem 0.3rem 2rem #a2d3bf;
+            padding: 0.61rem 0;
+        }
+
+        .btn-reset {
+            background: tomato;
+            border: 1px solid transparent;
+            width: 50px;
+            border-radius: 5px;
+            float: right;
+        }
+
+        .btn-reset:hover {
+            background-color: rgb(253, 131, 110) !important;
+            border: 1px solid;
+        }
+
+        #myresult,
+        #myscore {
+            text-align: center;
+            align-items: center;
+            background-color: #e8f0ff;
+            width: 60%;
+            margin: 12px auto;
+            border-radius: 12px;
+            flex-direction: column;
+            padding: 12px;
+            font-family: monospace;
+            
+
+        }
+
+        @media only screen and (max-width:966px) and (min-width:456px) {
+
+            #myresult,
+            #myscore {
+                width: 80%;
+                font-size: .9rem;
+                font-weight: bolder;
+            }
+.main{
+    width: 70%;
+}
+        }
+
+        @media only screen and (max-width:456px) {
+
+            #myresult,
+            #myscore {
+                width: 87%;
+                font-size: .8rem;
+                font-weight: bolder;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            .main {
+                width: 76%;
+                margin-top: 13%;
+               
+                flex-direction: column-reverse;
+            }
+            h1{
+                font-size: 2rem!important;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="display-4 text-center">Rock
+            Paper Scissors</h1>
+        <div class="main">
+            <div class="choices">
+                <button class="btn btn1 " id="Rock"
+                    style="background-color: #76a7ff; width: 86px;margin: .2rem auto;">Rock</button>
+                <button class="btn btn1 " id="Paper"
+                    style="background-color: #76a7ff; width: 86px;margin: .2rem auto;">Paper</button>
+                <button class="btn btn1 " id="Scissors"
+                    style="background-color: #76a7ff; width:86px;margin: .2rem auto;">Scissors</button>
+            </div>
+            <hr>
+            <div class="score" id="myresult">
+                <h6>Current Status</h6>
+            </div>
+            <div class="score" id="myscore">
+                <h6>Current Score/<h6>
+            </div>
+            <div class="reset_score">
+                <button class=" btn-reset">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </header>
+</body>
+
+</html>
